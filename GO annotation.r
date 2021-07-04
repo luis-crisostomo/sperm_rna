@@ -1,7 +1,5 @@
 #Annotate sncRNA targets using GO terms
 
-#will clear all objects includes hidden objects.
-rm(list = ls(all.names = TRUE))
 
 #Load packages
 library(readr)
@@ -246,15 +244,6 @@ write.csv2(GO.MF_F2_HFD_vs_HFDt,"GO Molecular Function HFD-F2 vs HFDt-F2.csv", r
 write.csv2(GO.CC_F2_HFD_vs_HFDt,"GO Cellular Component HFD-F2 vs HFDt-F2.csv", row.names = FALSE)
 
 
-#test database
-# xx <- annFUN.org("BP", mapping = "org.Mm.eg.db", ID = "ensembl")
-# head(xx)
-
-#perform GO tests
-# go_test <- runTest(test, algorithm = "weight01", #the more balance algorithm. 'classic' (unhierarchical), 'lea' (?), 'elim' (more conservative), 'parentchild' (close to weight-9
-# statistic = "fisher")
-
-
 #create charts
 #input files were combined and edited in Excel
 library(readxl)
@@ -347,92 +336,3 @@ labels = list(font = 2, cex=1),
 )
 dev.off()
 
-
-#código antigo
-#Generation F0
-GO_results_Gen0 <- read_excel("GO_results_Gen0.xlsx", col_types = c("text", "text", "text", "text", "numeric", "numeric"))
-GO_results_Gen0$group <- factor(GO_results_Gen0$group, levels = c("CTRL vs. HFD", "CTRL vs. HFDt", "HFD vs. HFDt"))
-GO_results_Gen0$GO.analysis <- factor(GO_results_Gen0$GO.analysis, levels = c("Biological Process", "Molecular Function", "Cellular Component"))
-
-#bar graph (save as 1200 x 664)
-ggplot(data=GO_results_Gen0, aes(y=Term, x=norm.annot, fill=group)) + 
-geom_bar(stat="identity", position=position_dodge(preserve = 'single')) +
-facet_grid(rows = GO_results_Gen0$GO.analysis, scales="free_y", space="free") +
-scale_x_continuous(breaks = pretty(GO_results_Gen0$norm.annot, n = 10)) +
-scale_fill_brewer(palette="Set1") +
-labs(x = "GO annotations (per 1000 targets)", y = "GO terms", fill = "Group") +
-theme(axis.title = element_text(size = 12, face="bold")) + 
-theme(legend.title = element_text(size = 12, face="bold")) + 
-theme(strip.text.y = element_text(size = 12, face="bold"))
-
-#Generation F1
-GO_results_Gen1 <- read_excel("GO_results_Gen1.xlsx", col_types = c("text", "text", "text", "text", "numeric", "numeric"))
-GO_results_Gen1$group <- factor(GO_results_Gen1$group, levels = c("CTRL vs. HFD", "CTRL vs. HFDt", "HFD vs. HFDt"))
-GO_results_Gen1$GO.analysis <- factor(GO_results_Gen1$GO.analysis, levels = c("Biological Process", "Molecular Function", "Cellular Component"))
-
-#bar graph (save as 1200 x 764)
-ggplot(data=GO_results_Gen1, aes(y=Term, x=norm.annot, fill=group)) + 
-geom_bar(stat="identity", position=position_dodge(preserve = 'single')) +
-facet_grid(rows = GO_results_Gen1$GO.analysis, scales="free_y", space="free") +
-scale_x_continuous(breaks = pretty(GO_results_Gen1$norm.annot, n = 10)) +
-scale_fill_brewer(palette="Set1") +
-labs(x = "GO annotations (per 1000 targets)", y = "GO terms", fill = "Group") +
-theme(axis.title = element_text(size = 12, face="bold")) + 
-theme(legend.title = element_text(size = 12, face="bold")) + 
-theme(strip.text.y = element_text(size = 12, face="bold"))
-
-#Generation F2
-GO_results_Gen2 <- read_excel("GO_results_Gen2.xlsx", col_types = c("text", "text", "text", "text", "numeric", "numeric"))
-GO_results_Gen2$group <- factor(GO_results_Gen2$group, levels = c("CTRL vs. HFD", "CTRL vs. HFDt", "HFD vs. HFDt"))
-GO_results_Gen2$GO.analysis <- factor(GO_results_Gen2$GO.analysis, levels = c("Biological Process", "Molecular Function", "Cellular Component"))
-
-#bar graph (save as 1200 x 764)
-ggplot(data=GO_results_Gen2, aes(y=Term, x=norm.annot, fill=group)) + 
-geom_bar(stat="identity", position=position_dodge(preserve = 'single')) +
-facet_grid(rows = GO_results_Gen2$GO.analysis, scales="free_y", space="free") +
-scale_x_continuous(breaks = pretty(GO_results_Gen2$norm.annot, n = 10)) +
-scale_fill_brewer(palette="Set1") +
-labs(x = "GO annotations (per 1000 targets)", y = "GO terms", fill = "Group") +
-theme(axis.title = element_text(size = 12, face="bold")) + 
-theme(legend.title = element_text(size = 12, face="bold")) + 
-theme(strip.text.y = element_text(size = 12, face="bold"))
-
-#Biological process - Transgenerational
-GO_results_BP <- read_excel("GO_results_Biological process - All generations.xlsx", col_types = c("text", "text", "text", "text", "numeric", "numeric"))
-GO_results_BP$group <- factor(GO_results_BP$group, levels = c("CTRL vs. HFD", "CTRL vs. HFDt", "HFD vs. HFDt"))
-GO_results_BP$GO.analysis <- factor(GO_results_BP$GO.analysis, levels = c("F0 Generation", "F1 Generation", "F2 Generation"))
-
-#bar graph (save as 1200 x 764)
-ggplot(data=GO_results_BP, aes(y=Term, x=norm.annot, fill=group)) + 
-geom_bar(stat="identity", position=position_dodge(preserve = 'single')) +
-facet_grid(rows = GO_results_BP$GO.analysis, scales="free_y", space="free") +
-scale_x_continuous(breaks = pretty(GO_results_BP$norm.annot, n = 10)) +
-scale_fill_brewer(palette="Set1") +
-labs(x = "GO annotations (per 1000 targets)", y = "GO terms", fill = "Group") +
-theme(axis.title = element_text(size = 12, face="bold")) + 
-theme(legend.title = element_text(size = 12, face="bold")) + 
-theme(strip.text.y = element_text(size = 12, face="bold"))
-  
-#other options:
-#ylab("GO terms") + xlab("Number of annotations") +
-#geom_text(aes(label=Annotated), vjust=1.0, color="black", position = position_dodge(0.0), size=3.5) +
-#+ scale_fill_discrete(name="Type", breaks=c("TRUE", "FALSE", "NA"), labels=c("existing", "not existing", "missing values")) + scale_x_discrete(labels = c("bad", "good"))
-#facet_wrap(~GO.analysis, scales="free_y") + 
-#theme_minimal()
-#coord_flip()
-
-#Generation F0 vs. F1 - CTRL vs. HFD
-GO_results_Gen0vs1_HFD <- read_excel("GO_results_Gen0_Gen1-HFD.xlsx", col_types = c("text", "text", "text", "text", "numeric", "numeric"))
-GO_results_Gen0vs1_HFD$group <- factor(GO_results_Gen0vs1_HFD$group, levels = c("Generation F0", "Generation F0"))
-GO_results_Gen0vs1_HFD$GO.analysis <- factor(GO_results_Gen0vs1_HFD$GO.analysis, levels = c("Biological Process", "Molecular Function", "Cellular Component"))
-
-#bar graph (save as 1200 x 764)
-ggplot(data=GO_results_Gen0vs1_HFD, aes(y=Term, x=norm.annot, fill=group)) + 
-geom_bar(stat="identity", position=position_dodge(preserve = 'single')) +
-facet_grid(rows = GO_results_Gen0vs1_HFD$GO.analysis, scales="free_y", space="free") +
-scale_x_continuous(breaks = pretty(GO_results_Gen0vs1_HFD$norm.annot, n = 10)) +
-scale_fill_brewer(palette="Paired") +
-labs(x = "GO annotations (per 1000 targets)", y = "GO terms", fill = "Generation") +
-theme(axis.title = element_text(size = 12, face="bold")) + 
-theme(legend.title = element_text(size = 12, face="bold")) + 
-theme(strip.text.y = element_text(size = 12, face="bold"))
